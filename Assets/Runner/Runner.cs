@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class Runner : MonoBehaviour {
 
     public static float distanceTraveled;
@@ -14,11 +15,15 @@ public class Runner : MonoBehaviour {
     private Vector3 startPosition;
     private static int boosts;
 
+   // private static Runner instance;
 
     // Use this for initialization
     void Start () {
+        
+
         rb = GetComponent<Rigidbody>();
         rend = GetComponent<Renderer>();
+
         GameEventManager.GameStart += GameStart;
         GameEventManager.GameOver += GameOver;
         startPosition = transform.localPosition;
@@ -35,6 +40,7 @@ public class Runner : MonoBehaviour {
             if (touchingPlatform)
             {
                 rb.AddForce(jumpVelocity, ForceMode.VelocityChange);
+                AudioManager.PlayJump();
                 touchingPlatform = false;
                 candobulejump = true;
             }
@@ -43,12 +49,14 @@ public class Runner : MonoBehaviour {
                 if (boosts > 0)
                 {
                     rb.AddForce(boostVelocity, ForceMode.VelocityChange);
+                    AudioManager.PlayBoostJump();
                     boosts -= 1;
                     GUIManager.SetBoosts(boosts);
                 } else {
                     if (candobulejump)
                     {
                         rb.AddForce(jumpVelocity, ForceMode.VelocityChange);
+                        AudioManager.PlayJump();
                         candobulejump = false;
                     }
                 }
@@ -73,6 +81,7 @@ public class Runner : MonoBehaviour {
     public static void AddBoost()
     {
         boosts += 1;
+        AudioManager.PlayCollect();
         GUIManager.SetBoosts(boosts);
     }
 

@@ -28,6 +28,7 @@ public class GUIManager : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump"))
         {
+            AudioManager.PlayGUI();
             GameEventManager.TriggerGameStart();
 
         }
@@ -35,6 +36,7 @@ public class GUIManager : MonoBehaviour
 
     private void GameStart()
     {
+        AudioManager.PlayBM();
         gameOverText.enabled = false;
         instructionsText.enabled = false;
         runnerText.enabled = false;
@@ -43,6 +45,10 @@ public class GUIManager : MonoBehaviour
 
     private void GameOver()
     {
+        AudioManager.StopBM();
+        AudioManager.PlayDeath();
+        PlayerPrefs.SetInt("highscore", (int)Runner.distanceTraveled);
+        PlayerPrefs.Save();
         gameOverText.enabled = true;
         instructionsText.enabled = true;
         enabled = true;

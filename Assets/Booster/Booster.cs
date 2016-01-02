@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 
+
 public class Booster : MonoBehaviour
 {
 
     public Vector3 offset, rotationVelocity;
     public float recycleOffset, spawnChance;
+
 
     void Start()
     {
