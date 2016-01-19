@@ -1,5 +1,5 @@
 Base path: D:/Programme/Unity3D/Editor/Data
-Pipe name: \\.\pipe\UnityShaderCompiler-32bit-1-5464
+Pipe name: \\.\pipe\UnityShaderCompiler-32bit-1-6772
 Cmd: getPlatforms
 Unhandled exception: Readfile from pipe failed. GLE=Die Pipe wurde beendet.
 

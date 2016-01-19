@@ -47,6 +47,7 @@
   <ItemGroup>
      <Compile Include="Assets\Audio\AudioManager.cs" />
      <Compile Include="Assets\Booster\Booster.cs" />
+     <Compile Include="Assets\Booster\Resize.cs" />
      <Compile Include="Assets\Managers\GUIManager.cs" />
      <Compile Include="Assets\Managers\GameEventManager.cs" />
      <Compile Include="Assets\Platform\PlatformManager.cs" />

@@ -1,28 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-
 public class Runner : MonoBehaviour {
 
     public static float distanceTraveled;
+    public static float runnerHeight;
+    public static float runnerVelocity;
     public float acceleration;
     private bool touchingPlatform;
     private bool candobulejump;
+    public float zoomSpeed = 5f;
+    public float minZoomFOV = 30f;
+    public float maxZoomFOV = 50f;
     public Rigidbody rb;
     private Renderer rend;
+    private Camera cam;
     public Vector3 boostVelocity, jumpVelocity;
     public float gameOverY;
     private Vector3 startPosition;
     private static int boosts;
+    private static int setResize;
+    float timeLeft = 5.0f;
 
-   // private static Runner instance;
-
+    // private static Runner instance;
     // Use this for initialization
     void Start () {
-        
-
+       
         rb = GetComponent<Rigidbody>();
         rend = GetComponent<Renderer>();
+        cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 
         GameEventManager.GameStart += GameStart;
         GameEventManager.GameOver += GameOver;
@@ -63,11 +69,46 @@ public class Runner : MonoBehaviour {
             }
         }
         distanceTraveled = transform.localPosition.x;
+        runnerVelocity = rb.velocity.x;
+        runnerHeight = transform.localPosition.y;
+
         GUIManager.SetDistance(distanceTraveled);
         if (transform.localPosition.y < gameOverY)
         {
             GameEventManager.TriggerGameOver();
         }
+        
+        if (setResize != 1) { 
+            if (runnerHeight > 10 || runnerVelocity > 20)
+            {
+                cam.fieldOfView += zoomSpeed/40;
+                if (cam.fieldOfView > maxZoomFOV)
+                {
+                    cam.fieldOfView = maxZoomFOV;
+                }
+            }
+            if (runnerHeight <= 10 && runnerVelocity <= 20)
+            {
+                cam.fieldOfView -= zoomSpeed/40;
+                if (cam.fieldOfView < minZoomFOV)
+                {
+                    cam.fieldOfView = minZoomFOV;
+                }
+            }
+        }
+
+        if (setResize == 1)
+        {
+            transform.localScale = new Vector3(3f, 3f, 3f);
+            cam.fieldOfView = 20f;
+            timeLeft -= Time.deltaTime;
+            if (timeLeft < 0)
+            { 
+                setResize = 0;
+                transform.localScale = new Vector3(1f, 1f, 1f);
+            }
+        }
+        
     }
 
     void FixedUpdate()
@@ -83,6 +124,12 @@ public class Runner : MonoBehaviour {
         boosts += 1;
         AudioManager.PlayCollect();
         GUIManager.SetBoosts(boosts);
+    }
+
+    public static void rbResize()
+    {
+        AudioManager.PlayCollect();
+        setResize = 1;
     }
 
     void OnCollisionEnter()

@@ -12,6 +12,7 @@ public class PlatformManager : MonoBehaviour
     public Vector3 minSize, maxSize, minGap, maxGap;
     public float minY, maxY;
     public Booster booster;
+    public Resize resize;
 
     private Vector3 nextPosition;
     private Queue<Transform> objectQueue;
@@ -62,6 +63,7 @@ public class PlatformManager : MonoBehaviour
         position.x += scale.x * 0.5f;
         position.y += scale.y * 0.5f;
         booster.SpawnIfAvailable(position);
+        resize.SpawnIfAvailable(position);
 
         Transform o = objectQueue.Dequeue();
         o.localScale = scale;
