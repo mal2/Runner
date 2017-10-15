@@ -11,7 +11,7 @@ public class Runner : MonoBehaviour {
     private bool candobulejump;
     public float zoomSpeed = 5f;
     public float minZoomFOV = 30f;
-    public float maxZoomFOV = 50f;
+    public float maxZoomFOV = 30f;
     public Rigidbody rb;
     private Renderer rend;
     private Camera cam;
@@ -100,7 +100,7 @@ public class Runner : MonoBehaviour {
         if (setResize == 1)
         {
             transform.localScale = new Vector3(3f, 3f, 3f);
-            cam.fieldOfView = 20f;
+            cam.fieldOfView = 30f;
             timeLeft -= Time.deltaTime;
             if (timeLeft < 0)
             { 
