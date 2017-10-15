@@ -21,6 +21,7 @@ public class Runner : MonoBehaviour {
     private static int boosts;
     private static int setResize;
     float timeLeft = 5.0f;
+    private Transform[] children = null;
 
     // private static Runner instance;
     // Use this for initialization
@@ -36,11 +37,20 @@ public class Runner : MonoBehaviour {
         rend.enabled = false;
         rb.isKinematic = true;
         enabled = false;
+
+        children = new Transform[transform.childCount];
+        int i = 0;
+        foreach (Transform T in transform)
+            children[i++] = T;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            rbResize();
+        }
         if (Input.GetButtonDown("Jump"))
         {
             if (touchingPlatform)
@@ -98,17 +108,38 @@ public class Runner : MonoBehaviour {
         }
 
         if (setResize == 1)
-        {
-            transform.localScale = new Vector3(3f, 3f, 3f);
-            cam.fieldOfView = 30f;
+        {              
+            if (cam.fieldOfView < maxZoomFOV)
+            {
+                cam.fieldOfView += zoomSpeed / 40;
+            }
+
+            transform.DetachChildren();                     // Detach
+            if (transform.localScale.x < 3) {
+                transform.localScale += new Vector3(1, 1, 1) * Time.deltaTime * 0.5f;
+            }
+            //transform.localScale = new Vector3(3f, 3f, 3f);  // Scale        
+            foreach (Transform T in children)              // Re-Attach
+                T.parent = transform;
+
             timeLeft -= Time.deltaTime;
             if (timeLeft < 0)
             { 
-                setResize = 0;
-                transform.localScale = new Vector3(1f, 1f, 1f);
+                timeLeft = 5.0f;
+                setResize = 2;
+                //transform.localScale = new Vector3(1f, 1f, 1f);
             }
         }
-        
+        if (setResize == 2)
+        {
+            transform.DetachChildren();
+            if (transform.localScale.x > 1) {
+                transform.localScale -= new Vector3(1, 1, 1) * Time.deltaTime * 0.5f;
+            }
+            foreach (Transform T in children)              // Re-Attach
+                T.parent = transform;
+        }
+
     }
 
     void FixedUpdate()
